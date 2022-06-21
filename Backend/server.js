@@ -10,6 +10,7 @@ const { type } = require('os')
 
 /**
  * needs to get long and lat from frontend 
+ * needs to send soil info to frontend 
  */
 
 // init app 
@@ -23,11 +24,10 @@ app.get('/', (req, res) => {
   res.status(200).send('Soil Server')
 })
 
-// route to pull soil info (requires longitude and latitude)
+// route to pull soil info (requires longitude and latitude), calculate soil score, and send data to frontend 
 app.get('/soil', (req, res) => {
-   thislat = 49.438420
-   thislong = -106.596238
-   res.send('soil data')
+   thislat = 49.5815
+   thislong = -96.941148
    var options = { 
     method: 'GET',
     url: `https://api.ambeedata.com/soil/latest/by-lat-lng?by-lat-lng`,
@@ -37,13 +37,51 @@ app.get('/soil', (req, res) => {
         'Content-type': 'application/json'
     }
   }
-
+  
+  // get info from API, calculate rating 
   request(options, function (error, response, body) {
 	  if (error) throw new Error(error);
       console.log("Response recieved. \n")
       jsonBody = JSON.parse(body)
-      console.log("temperature: ", jsonBody.data[0].soil_temperature)
-      console.log("moisture: ", jsonBody.data[0].soil_moisture)
+      const temp = jsonBody.data[0].soil_temperature
+      const moisture = jsonBody.data[0].soil_moisture
+      var score = 5 
+      if (temp<10){
+        var tempRating = "too cold"
+        score -= 1 
+      }
+      else if (temp>20){
+        var tempRating = "too hot"
+        score -= 1
+      }
+      else{
+        var tempRating = "optimal"
+      }
+      if (moisture>40){
+        var moistureRating = "too wet"
+        score -= 1
+      }
+      else if (moisture>= 20 && moisture<=30){
+        var moistureRating = "somewhat dry"
+        score -= 1
+      }
+      else if (moisture<20){
+        var moistureRating = "very dry"
+        score -= 2
+      }
+      else{
+        var moistureRating = "optimal"
+      }
+      soilData = {
+        'temp' : temp,
+        'moisture' : moisture,
+        'tempRaing' : tempRating,
+        'moistureRating' : moistureRating,
+        'score' : score 
+      }
+      console.log(soilData)
+      // send data to frontend  
+      res.status(200).send(soilData)
   })
 })
 
