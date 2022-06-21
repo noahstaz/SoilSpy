@@ -6,8 +6,7 @@ const cors = require("cors")
 const { all } = require('proxy-addr')
 const { type } = require('os')
 
-/**
- * needs to get long and lat from frontend 
+/** 
  * needs to send soil info to frontend 
  */
 
@@ -23,21 +22,20 @@ app.get('/', (req, res) => {
 })
 
 // route to pull soil info (requires longitude and latitude), calculate soil score, and send data to frontend 
-app.get('/soil', (req, res) => { 
-   thislat = 49.5815
-   thislong = -96.941148
+app.post('/soil', (req, res) => { 
    var options = { 
     method: 'GET',
     url: `https://api.ambeedata.com/soil/latest/by-lat-lng?by-lat-lng`,
-    qs:{lat: `${thislat}`, lng: `${thislong}`}, 
+    qs:{lat: `${req.body.latitude}`, lng: `${req.body.longitude}`}, 
     headers: {
         'x-api-key': '8ca2bf18d51da867ef2d3cbca381e1832514d4c010d0be4d9f5f811fe9c2b8e5',
         'Content-type': 'application/json'
     }
   }
-  console.log(req.body)
-  res.status(200).send(req)
-  /*
+  // -106.600058
+  // 49.438794
+
+
   // get info from API, calculate rating 
   request(options, function (error, response, body) {
 	  if (error) throw new Error(error);
@@ -79,11 +77,10 @@ app.get('/soil', (req, res) => {
         'moistureRating' : moistureRating,
         'score' : score 
       }
-      console.log(soilData)
+      console.log("soildata: ", soilData)
       // send data to frontend  
       res.status(200).send(soilData)
   })
-  */
 })
 
 // start server

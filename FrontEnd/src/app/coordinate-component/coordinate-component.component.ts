@@ -15,15 +15,13 @@ export class CoordinateComponentComponent implements OnInit {
 
   onSubmit(){
     let longitude = (document.getElementById("longitude") as HTMLInputElement).value;
-    let latitude = (document.getElementById("longitude") as HTMLInputElement).value;
-    console.log(longitude)
-    console.log(latitude)
-    this.httpClient.get('http://localhost:3000/soil', {
-      params: new HttpParams({
-        
-    })
+    let latitude = (document.getElementById("latitude") as HTMLInputElement).value;
+    this.httpClient.post('http://localhost:3000/soil', {
+      // this is the problem 
+      longitude : longitude, 
+      latitude : latitude
   }).subscribe(resp => {
-    console.log(resp);
+    console.log("response ", resp);
   })
   }
 
