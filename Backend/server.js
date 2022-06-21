@@ -8,9 +8,8 @@ const { type } = require('os')
 const { json } = require('body-parser')
 
 /** 
- * needs to send soil info to frontend 
  * overlay the RMS 
- * Land Location field 
+ * Land Location as input 
  */
 
 // init app 
