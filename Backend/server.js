@@ -6,9 +6,10 @@ const cors = require("cors")
 const { all } = require('proxy-addr')
 const { type } = require('os')
 
+// https://www.getambee.com/api-documentation
+
 /**
- * needs route to get soil data
- * needs route to get long and lat from frontend 
+ * needs to get long and lat from frontend 
  */
 
 // init app 
@@ -24,11 +25,13 @@ app.get('/', (req, res) => {
 
 // route to pull soil info (requires longitude and latitude)
 app.get('/soil', (req, res) => {
+   thislat = 49.438420
+   thislong = -106.596238
    res.send('soil data')
    var options = { 
     method: 'GET',
     url: `https://api.ambeedata.com/soil/latest/by-lat-lng?by-lat-lng`,
-    qs:{lat: '49.438420', lng: '-106.596238'}, 
+    qs:{lat: `${thislat}`, lng: `${thislong}`}, 
     headers: {
         'x-api-key': '8ca2bf18d51da867ef2d3cbca381e1832514d4c010d0be4d9f5f811fe9c2b8e5',
         'Content-type': 'application/json'
@@ -40,7 +43,7 @@ app.get('/soil', (req, res) => {
       console.log("Response recieved. \n")
       jsonBody = JSON.parse(body)
       console.log("temperature: ", jsonBody.data[0].soil_temperature)
-      console.log("temperature: ", jsonBody.data[0].soil_moisture)
+      console.log("moisture: ", jsonBody.data[0].soil_moisture)
   })
 })
 
