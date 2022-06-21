@@ -1,8 +1,6 @@
-.score {
- background-color:white;
- text-align:center;
- width:400px;
- height:200px;
- border: solid black 1px;
- margin:10px;
+.score { 
+ width:300px;
+ height:160px;
+ margin-top:20px;
+ border-radius: 7px; 
 }

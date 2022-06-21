@@ -5,9 +5,12 @@ const bodyparser = require('body-parser')
 const cors = require("cors")
 const { all } = require('proxy-addr')
 const { type } = require('os')
+const { json } = require('body-parser')
 
 /** 
  * needs to send soil info to frontend 
+ * overlay the RMS 
+ * Land Location field 
  */
 
 // init app 
@@ -32,9 +35,6 @@ app.post('/soil', (req, res) => {
         'Content-type': 'application/json'
     }
   }
-  // -106.600058
-  // 49.438794
-
 
   // get info from API, calculate rating 
   request(options, function (error, response, body) {

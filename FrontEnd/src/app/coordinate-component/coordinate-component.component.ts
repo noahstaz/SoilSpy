@@ -17,11 +17,14 @@ export class CoordinateComponentComponent implements OnInit {
     let longitude = (document.getElementById("longitude") as HTMLInputElement).value;
     let latitude = (document.getElementById("latitude") as HTMLInputElement).value;
     this.httpClient.post('http://localhost:3000/soil', {
-      // this is the problem 
       longitude : longitude, 
       latitude : latitude
   }).subscribe(resp => {
-    console.log("response ", resp);
+    console.log("response ", resp)
+    let soilScore = document.getElementById("soilScore")
+    if (soilScore){
+      soilScore.innerHTML = JSON.stringify(resp)
+    }
   })
   }
 
