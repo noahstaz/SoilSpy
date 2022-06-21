@@ -35,7 +35,7 @@ app.get('/soil', (req, res) => {
         'Content-type': 'application/json'
     }
   }
-  console.log(req)
+  console.log(req.body)
   res.status(200).send(req)
   /*
   // get info from API, calculate rating 

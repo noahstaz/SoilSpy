@@ -1,13 +1,11 @@
-<form action="/soil" method="GET">
+
   <div class="form-group">
     <label for="longitude">Longitude</label>
     <input type="text" class="form-control" id="longitude" aria-describedby="emailHelp" placeholder="Enter Longitude" style="width: 300px;">
-  </div>
-  <br>
-  <div class="form-group">
+
     <label for="latitude">Latitude</label>
     <input type="text" class="form-control" id="latitude" placeholder="Enter Latitude" style="width: 300px;">
   </div>
   <br>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+  <button type="submit" class="btn btn-primary" (click)="onSubmit()">Submit</button>
+
