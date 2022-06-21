@@ -6,6 +6,11 @@ const cors = require("cors")
 const { all } = require('proxy-addr')
 const { type } = require('os')
 
+/**
+ * needs route to get soil data
+ * needs route to get long and lat from frontend 
+ */
+
 // init app 
 const app = express()
 app.use(cors())  
@@ -18,26 +23,28 @@ app.get('/', (req, res) => {
 })
 
 // route to pull soil info (requires longitude and latitude)
-app.get('/teams', (req, res) => {
-  var options = { 
+app.get('/soil', (req, res) => {
+   res.send('soil data')
+   var options = { 
     method: 'GET',
-    url: `https://api.ambeedata.com/soil/latest/by-lat-lng?lat=${req.lat}&lng=${req.long}`,
+    url: `https://api.ambeedata.com/soil/latest/by-lat-lng?by-lat-lng`,
+    qs:{lat: '49.438420', lng: '-106.596238'}, 
     headers: {
-        'Content-type': 'application/json',
-        'x-api-key': '71b806f988msh6c00084b722b3a3p17923cjsnee5cd7d8c0af',
-        useQueryString: true
+        'x-api-key': '8ca2bf18d51da867ef2d3cbca381e1832514d4c010d0be4d9f5f811fe9c2b8e5',
+        'Content-type': 'application/json'
     }
   }
 
   request(options, function (error, response, body) {
 	  if (error) throw new Error(error);
       console.log("Response recieved. \n")
-      JsonOutput = JSON.parse(body)
-      var teams = JsonOutput.api.teams
-      res.status(200).send(teams)
+      jsonBody = JSON.parse(body)
+      console.log("temperature: ", jsonBody.data[0].soil_temperature)
+      console.log("temperature: ", jsonBody.data[0].soil_moisture)
   })
 })
 
+/*
 // Route to match games with teams that user has chosen, then sends list of those games to client
 app.get('/games', (req, res) => {
   var options = { 
@@ -69,16 +76,7 @@ app.get('/games', (req, res) => {
     })
   })
 })
-
-// post router to edit teams that the user likes 
-app.put('/teams', (req, res) => { 
-  // var newTry = JSON.parse(req.body.newTeams)
-  mongo.db("floarDb").collection("floarCollection").updateOne(
-    {userid: "1"},
-    {$set: {"teams": req.body.newTeams}}
-  )
-  res.status(200).send('Floar Server')
-})
+*/ 
 
 // start server
 app.listen(process.env.PORT || 3000, () => {
