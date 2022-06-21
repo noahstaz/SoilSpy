@@ -6,8 +6,6 @@ const cors = require("cors")
 const { all } = require('proxy-addr')
 const { type } = require('os')
 
-// https://www.getambee.com/api-documentation
-
 /**
  * needs to get long and lat from frontend 
  * needs to send soil info to frontend 
@@ -25,7 +23,7 @@ app.get('/', (req, res) => {
 })
 
 // route to pull soil info (requires longitude and latitude), calculate soil score, and send data to frontend 
-app.get('/soil', (req, res) => {
+app.get('/soil', (req, res) => { 
    thislat = 49.5815
    thislong = -96.941148
    var options = { 
@@ -37,7 +35,9 @@ app.get('/soil', (req, res) => {
         'Content-type': 'application/json'
     }
   }
-  
+  console.log(req)
+  res.status(200).send(req)
+  /*
   // get info from API, calculate rating 
   request(options, function (error, response, body) {
 	  if (error) throw new Error(error);
@@ -46,11 +46,11 @@ app.get('/soil', (req, res) => {
       const temp = jsonBody.data[0].soil_temperature
       const moisture = jsonBody.data[0].soil_moisture
       var score = 5 
-      if (temp<10){
+      if (temp<18){
         var tempRating = "too cold"
         score -= 1 
       }
-      else if (temp>20){
+      else if (temp>24){
         var tempRating = "too hot"
         score -= 1
       }
@@ -83,41 +83,8 @@ app.get('/soil', (req, res) => {
       // send data to frontend  
       res.status(200).send(soilData)
   })
+  */
 })
-
-/*
-// Route to match games with teams that user has chosen, then sends list of those games to client
-app.get('/games', (req, res) => {
-  var options = { 
-    method: 'GET',
-    url: 'https://api-nba-v1.p.rapidapi.com/games/seasonYear/2020',
-    headers: {
-      'x-rapidapi-host': 'api-nba-v1.p.rapidapi.com',
-      'x-rapidapi-key': '71b806f988msh6c00084b722b3a3p17923cjsnee5cd7d8c0af',
-      useQueryString: true
-    }
-  }
-    // get all games played in 2020 from API
-  request(options, function (error, response, body) {
-	  if (error) throw new Error(error);
-    console.log("Response recieved. \n")
-    JsonOutput = JSON.parse(body)
-    allGames = JsonOutput.api.games
-    
-    // get teams chosen by user 1 in database 
-    mongo.db("floarDb").collection("floarCollection").findOne({userid: "1"}, function(err, result){
-      if (err) throw err
-      userTeams = result.teams
-      // make array of games that include teams from user 
-      const filteredGames = allGames.filter(game => {
-        return userTeams.includes(game.hTeam.teamId)
-      })
-      console.log(filteredGames)
-      res.status(200).send(filteredGames)
-    })
-  })
-})
-*/ 
 
 // start server
 app.listen(process.env.PORT || 3000, () => {
